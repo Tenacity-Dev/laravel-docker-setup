@@ -1,0 +1,74 @@
+services:
+  app:
+    build:
+      context: ./laravel-best
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+        - docker-network
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+
+  queue-worker:
+    build:
+      context: ./laravel-best
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    networks:
+      - docker-network
+    depends_on:
+      - db
+    command: php artisan queue:work
+  
+  caddy:
+    image: caddy:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./laravel-best:/var/www/html
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - docker-network
+    depends_on:
+      - app
+
+  db:
+    image: bitnami/postgresql:16.3.0
+    platform: linux/amd64
+    ports:
+      - 5432:5432
+    restart: always
+    volumes:
+      - db-data:/bitnami/postgresql
+    environment:
+      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
+      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
+    networks:
+      - docker-network
+
+  redis:
+    image: bitnami/redis:7.2
+    platform: linux/amd64
+    ports:
+      - 6379:6379
+    restart: always
+    volumes:
+      - redis-data:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    networks:
+      - docker-network
+
+volumes:
+  db-data:
+  redis-data:
+
+networks:
+  docker-network:
+    driver: bridge
