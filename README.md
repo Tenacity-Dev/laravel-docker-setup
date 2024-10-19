@@ -1,7 +1,14 @@
+# Laravel setup with Docker
+
+This repository contains a Dockerised Laravel application that's easy to understand and use. It has a database and redis running. It comes with a Worker for potential jobs you might have and a Caddy Web server.
+
+[Youtube link for the video that goes through this repository](https://youtu.be/1aDuaPhJT8E)
+
 This repository contains a Laravel project setup with Docker, it also includes Postgres and Redis with a Queue Worker.
 
-Setup:
-- Clone the repository
+### Setup
+
+Clone the repository
 
 Create `.env` file from `.env.example` file
 > cp .env.example .env
