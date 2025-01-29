@@ -1,3 +1,10 @@
+# UPDATED VERSION OF THIS REPOSITORY IS IN THE LINK BELOW
+
+https://github.com/Tenacity-Dev/laravel-docker-production
+
+
+---
+
 # Laravel setup with Docker
 
 This repository contains a Dockerised Laravel application that's easy to understand and use. It has a database and redis running. It comes with a Worker for potential jobs you might have and a Caddy Web server.
